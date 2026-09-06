@@ -1,0 +1,143 @@
+/* ReserveSphere theme: Bootstrap 5 with the palette from the approved prototype. */
+:root {
+  --rs-sidebar: #0a1f26;
+  --rs-sidebar-hover: #12313b;
+  --rs-teal: #0f9b7c;
+  --rs-teal-dark: #0b7d63;
+  --rs-surface: #f6f8f9;
+
+  --bs-primary: var(--rs-teal);
+  --bs-primary-rgb: 15, 155, 124;
+  --bs-body-bg: var(--rs-surface);
+  --bs-body-color: #1c2b33;
+  --bs-border-color: #e3e8ea;
+  --bs-link-color: var(--rs-teal-dark);
+  --bs-link-hover-color: var(--rs-sidebar);
+  --bs-body-font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+body { background: var(--rs-surface); }
+
+/* Buttons and focus rings follow the teal accent rather than Bootstrap blue. */
+.btn-primary {
+  --bs-btn-bg: var(--rs-teal);
+  --bs-btn-border-color: var(--rs-teal);
+  --bs-btn-hover-bg: var(--rs-teal-dark);
+  --bs-btn-hover-border-color: var(--rs-teal-dark);
+  --bs-btn-active-bg: var(--rs-teal-dark);
+  --bs-btn-active-border-color: var(--rs-teal-dark);
+  --bs-btn-disabled-bg: var(--rs-teal);
+  --bs-btn-disabled-border-color: var(--rs-teal);
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--rs-teal-dark);
+  --bs-btn-border-color: var(--rs-teal);
+  --bs-btn-hover-bg: var(--rs-teal);
+  --bs-btn-hover-border-color: var(--rs-teal);
+  --bs-btn-active-bg: var(--rs-teal-dark);
+  --bs-btn-active-border-color: var(--rs-teal-dark);
+}
+.form-control:focus, .form-select:focus, .form-check-input:focus, .btn:focus-visible {
+  border-color: var(--rs-teal);
+  box-shadow: 0 0 0 .2rem rgba(15, 155, 124, .2);
+}
+.form-check-input:checked { background-color: var(--rs-teal); border-color: var(--rs-teal); }
+.nav-pills .nav-link.active { background-color: var(--rs-teal); }
+.text-teal { color: var(--rs-teal-dark) !important; }
+
+/* --- Application shell ------------------------------------------------- */
+.rs-shell { min-height: 100vh; }
+
+.rs-sidebar {
+  background: var(--rs-sidebar);
+  color: #cfe0e4;
+  width: 250px;
+  flex: 0 0 250px;
+}
+@media (min-width: 992px) {
+  .rs-sidebar { position: sticky; top: 0; height: 100vh; }
+}
+.rs-brand { color: #fff; font-weight: 700; letter-spacing: -.4px; }
+.rs-brand small { color: var(--rs-teal); letter-spacing: 1.2px; font-size: .58rem; }
+.rs-role-chip {
+  background: var(--rs-sidebar-hover);
+  border-radius: .5rem;
+  font-size: .78rem;
+  color: #e7f1f2;
+}
+.rs-nav .nav-link {
+  color: #a9c2c8;
+  border-radius: .5rem;
+  padding: .55rem .75rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  font-size: .93rem;
+}
+.rs-nav .nav-link:hover { background: var(--rs-sidebar-hover); color: #fff; }
+.rs-nav .nav-link.active { background: var(--rs-sidebar-hover); color: #fff; font-weight: 600; }
+.rs-nav .nav-link.active::before {
+  content: '';
+  width: 3px; height: 18px;
+  background: var(--rs-teal);
+  border-radius: 3px;
+  margin-left: -.75rem;
+  margin-right: .1rem;
+}
+.rs-sidebar-footer { border-top: 1px solid rgba(255, 255, 255, .08); }
+.rs-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--rs-teal);
+  color: #fff;
+  display: grid; place-items: center;
+  font-size: .8rem; font-weight: 700;
+  flex: 0 0 34px;
+}
+
+.rs-topbar { background: #fff; border-bottom: 1px solid var(--bs-border-color); }
+.rs-breadcrumb {
+  font-size: .68rem;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: #90a4ac;
+}
+.rs-main { background: var(--rs-surface); }
+
+/* --- Cards -------------------------------------------------------------- */
+.rs-card {
+  background: #fff;
+  border: 1px solid var(--bs-border-color);
+  border-radius: .75rem;
+}
+.rs-stat-value { font-size: 1.75rem; font-weight: 700; letter-spacing: -1px; }
+.rs-stat-label { font-size: .66rem; letter-spacing: 1.1px; text-transform: uppercase; color: #8fa3ab; }
+.rs-amenity {
+  background: var(--rs-surface);
+  border: 1px solid var(--bs-border-color);
+  border-radius: .35rem;
+  padding: .1rem .45rem;
+  font-size: .72rem;
+  color: #55707a;
+  display: inline-block;
+}
+.rs-schedule-item { border-left: 3px solid var(--rs-teal); background: #edf9f5; border-radius: .5rem; }
+.rs-quote { border-left: 3px solid var(--rs-teal); padding-left: .6rem; }
+.rs-schedule-item.rs-free { border-left-color: var(--bs-border-color); background: #fff; }
+.rs-room-thumb {
+  height: 110px;
+  border-radius: .5rem .5rem 0 0;
+  background: linear-gradient(135deg, #dceff0, #eef4f5);
+  display: grid; place-items: center;
+  color: #9dbcc2; font-size: 1.7rem;
+}
+.rs-bar { background: var(--rs-teal); border-radius: 3px; min-height: 4px; }
+.rs-notification-unread { background: #f2fbf8; }
+.rs-auth-panel { max-width: 430px; }
+
+/* Keep the wordmark on two tidy lines regardless of sidebar width. */
+.rs-brand, .rs-brand small { white-space: nowrap; }
+
+/* Bootstrap has no min-width utility; without it a flex child refuses to shrink
+   below its content and the whole page scrolls sideways on small screens. */
+.min-w-0 { min-width: 0; }
