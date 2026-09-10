@@ -1,14 +1,52 @@
-# ReserveSphere - Client
+# 🏢 ReserveSphere Frontend (React)
 
 Front-end for **ReserveSphere**, a meeting, training and conference room reservation
-system for the Ministry of Transport and its affiliated authorities.
+system for the Ministry of Transport and its affiliated authorities, built with
+**React 19 + Vite**.
 
-Built with **React 19**, **Vite**, **Redux Toolkit** (with RTK Query) and **Bootstrap 5**.
 The API it talks to lives in [`ReserveSphere-server`](../ReserveSphere-server).
 
 ---
 
-## Stack
+## 🎯 Description
+
+The app serves three types of user:
+
+**👤 Employees**
+- Search rooms by time window, capacity, floor and amenities
+- Request a booking, invite attendees, download it as a calendar event
+- Modify or cancel their own requests
+
+**🛠️ Room admins**
+- Everything an employee can do
+- Approve, reject or emergency-override requests for the rooms assigned to them
+- Read utilisation reports for those rooms
+
+**👑 Owner**
+- Full access: create, edit and delete rooms, assign room admins
+- Change any user's role
+- Decide on every room's requests and read system-wide reports
+
+Login and registration use a role-based flow. Data is persisted in the backend via
+PostgreSQL; the session is kept in `localStorage`.
+
+---
+
+## 🧑‍💻 User Requirements
+
+- Log in or sign up with an e-mail and password
+- New sign-ups are created as **employees**; only the owner can promote someone to
+  `room_admin` or `owner`, so nobody can grant themselves admin rights at registration
+- Employees can search rooms, book them and manage their own requests
+- Room admins additionally see an approval queue and reports for their rooms
+- The owner additionally sees room management and the staff directory
+- The app remembers login sessions using `localStorage`
+- Route guards hide screens a role may not open; the API enforces the same rules
+  independently, so the client guard is for usability, not security
+
+---
+
+## 🛠️ Technologies
 
 | Concern | Choice | Why |
 | --- | --- | --- |
@@ -19,14 +57,16 @@ The API it talks to lives in [`ReserveSphere-server`](../ReserveSphere-server).
 | Styling | Bootstrap 5 + React-Bootstrap | Responsive grid and accessible components out of the box |
 | Routing | React Router 7 | Nested routes and route-level role guards |
 | Icons | Bootstrap Icons | Matches the Bootstrap visual language |
+| Session persistence | `localStorage` | Token and user survive a refresh |
 
 ---
 
-## Getting started
+## 🚀 Getting Started
 
 The API must be running first (see the server README).
 
 ```bash
+cd ReserveSphere-client
 npm install
 cp .env.example .env     # VITE_API_URL, defaults to http://localhost:4000/api
 npm run dev              # http://localhost:5173
@@ -38,49 +78,41 @@ npm run dev              # http://localhost:5173
 | `npm run build` | Production bundle in `dist/` |
 | `npm run preview` | Serve the production bundle locally |
 
+There is no `npm start` - Vite projects name the dev script `dev`.
+
 Sign in with any seeded account - the login screen lists three of them, and the password
 for all seeded accounts is `Password123!`.
 
 ---
 
-## Why React rather than plain HTML, CSS and JavaScript
-
-This application is a good illustration of the difference:
-
-- **Declarative rendering.** The room list, the approval queue and the notification badge
-  are functions of state. With hand-written DOM code every one of those would need its own
-  imperative update path, and each path is a place for the screen to drift out of sync with
-  the data.
-- **Components instead of copies.** `StatusBadge`, `RoomCard` markup and the shell in
-  `Layout` are written once and reused on every screen. In a multi-page static site the
-  same header and sidebar are copied into each page and must then be changed in each page.
-- **Client-side routing.** Moving between the dashboard and the approval queue re-renders
-  one region instead of reloading the document, so the session, the cached room list and
-  scroll position survive the navigation.
-- **State management that scales.** RTK Query keeps one cache of server data for the whole
-  app: approving a request invalidates the `Reservation` and `Stats` tags, and every screen
-  showing that data refreshes itself. The equivalent by hand is manual bookkeeping in each
-  event handler.
-- **Ecosystem.** Form controls, modals, offcanvas navigation and route guards come from
-  maintained libraries rather than bespoke code.
-
-The trade-off is a build step and a JavaScript bundle, which is the right trade for an
-authenticated internal application and the wrong one for a static brochure page.
-
----
-
-## Project layout
+## 🗂️ Project Structure
 
 ```
-src/main.jsx              Entry point: Redux Provider, Router, Bootstrap CSS
-src/App.jsx               Route table, including role-guarded branches
-src/index.css             Design tokens and the application shell styling
-src/app/store.js          Redux store
-src/app/api.js            RTK Query API slice - every server call is defined here
-src/features/authSlice.js Session state (token + user), persisted to localStorage
-src/lib/format.js         Date, status and error formatting helpers
-src/components/           Layout, RequireAuth, NotificationBell, StatusBadge, Feedback
-src/pages/                One component per screen
+ReserveSphere-client/
+├── index.html                # Vite entry document
+├── vite.config.js
+└── src/
+    ├── main.jsx              # entry point: Redux Provider, Router, Bootstrap CSS
+    ├── App.jsx               # route table, including role-guarded branches
+    ├── index.css             # design tokens and the application shell styling
+    ├── app/
+    │   ├── store.js          # Redux store
+    │   └── api.js            # RTK Query API slice - every server call is defined here
+    ├── features/
+    │   └── authSlice.js      # session state (token + user), persisted to localStorage
+    ├── lib/
+    │   └── format.js         # date, status and error formatting helpers
+    ├── components/
+    │   ├── Layout.jsx        # shell: sidebar, top bar, offcanvas navigation
+    │   ├── RequireAuth.jsx   # route guard
+    │   ├── NotificationBell.jsx
+    │   ├── StatusBadge.jsx
+    │   └── Feedback.jsx      # Loading, ErrorAlert, EmptyState
+    └── pages/                # one component per screen
+        ├── Login.jsx  Register.jsx  Dashboard.jsx
+        ├── Rooms.jsx  Reserve.jsx  MyReservations.jsx
+        ├── Approvals.jsx  Reports.jsx
+        └── ManageRooms.jsx  ManageUsers.jsx
 ```
 
 ### Architecture notes
@@ -106,7 +138,7 @@ leave the UI retrying forever.
 
 ---
 
-## Screens
+## 🖥️ Screens
 
 | Route | Who can open it | What it does |
 | --- | --- | --- |
@@ -126,7 +158,33 @@ usability, not security.
 
 ---
 
-## Responsiveness
+## ⚛️ Why React rather than plain HTML, CSS and JavaScript
+
+This application is a good illustration of the difference:
+
+- **Declarative rendering.** The room list, the approval queue and the notification badge
+  are functions of state. With hand-written DOM code every one of those would need its own
+  imperative update path, and each path is a place for the screen to drift out of sync with
+  the data.
+- **Components instead of copies.** `StatusBadge`, `RoomCard` markup and the shell in
+  `Layout` are written once and reused on every screen. In a multi-page static site the
+  same header and sidebar are copied into each page and must then be changed in each page.
+- **Client-side routing.** Moving between the dashboard and the approval queue re-renders
+  one region instead of reloading the document, so the session, the cached room list and
+  scroll position survive the navigation.
+- **State management that scales.** RTK Query keeps one cache of server data for the whole
+  app: approving a request invalidates the `Reservation` and `Stats` tags, and every screen
+  showing that data refreshes itself. The equivalent by hand is manual bookkeeping in each
+  event handler.
+- **Ecosystem.** Form controls, modals, offcanvas navigation and route guards come from
+  maintained libraries rather than bespoke code.
+
+The trade-off is a build step and a JavaScript bundle, which is the right trade for an
+authenticated internal application and the wrong one for a static brochure page.
+
+---
+
+## 📱 Responsiveness
 
 Bootstrap's grid does the work, with three deliberate breakpoints:
 
@@ -141,7 +199,7 @@ browsers show their own pickers and keyboards instead of a JavaScript widget.
 
 ---
 
-## Notes and limitations
+## ⚠️ Notes and limitations
 
 - **Authentication** uses a bearer token in `localStorage`, attached by RTK Query's
   `prepareHeaders`. That is exposed to XSS in principle; a production deployment behind the
@@ -152,7 +210,7 @@ browsers show their own pickers and keyboards instead of a JavaScript widget.
 
 ---
 
-## Deployment
+## 🚢 Deployment
 
 `npm run build` produces a static `dist/` directory that any static host or CDN can serve.
 
